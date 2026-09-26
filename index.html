@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Congratulations — Graduation 💗</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fff0f5, #ffd6e8, #ffb3d1);
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* Overlay for Browser Autoplay Compliance */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 240, 245, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .open-card-btn {
+            background: linear-gradient(135deg, #ff69b4, #d63384);
+            color: white;
+            font-size: 1.25rem;
+            font-weight: bold;
+            padding: 1rem 2.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(214, 51, 132, 0.4);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .open-card-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 30px rgba(214, 51, 132, 0.5);
+        }
+
+        .system-container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .system-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #d63384;
+        }
+
+        /* Music Controls & Audio Display */
+        .music-player-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px dashed #ff85c1;
+            border-radius: 16px;
+            padding: 1.2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.15);
+        }
+
+        .song-title {
+            font-size: 0.95rem;
+            color: #8b2a63;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+        }
+
+        .music-btn {
+            background: linear-gradient(135deg, #ff69b4, #d63384);
+            color: white;
+            border: none;
+            padding: 0.65rem 1.6rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(214, 51, 132, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.04);
+            background: linear-gradient(135deg, #d63384, #ff69b4);
+        }
+
+        .lyrics-display {
+            margin-top: 0.8rem;
+            font-size: 0.95rem;
+            color: #8b2a63;
+            font-style: italic;
+        }
+
+        /* Lyrics Container */
+        .lyrics-box {
+            background: rgba(255, 240, 245, 0.6);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-top: 1rem;
+            max-height: 180px;
+            overflow-y: auto;
+            border: 1px solid #ffb3d1;
+            text-align: center;
+            color: #6b1d4a;
+            font-size: 0.92rem;
+            line-height: 1.7;
+        }
+
+        .lyrics-box h3 {
+            color: #d63384;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Hidden YouTube Iframe Player */
+        #youtube-player-container {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .letter-card {
+            background: #ffffff;
+            width: 100%;
+            padding: 3rem 2.5rem;
+            border-radius: 24px;
+            box-shadow: 0 12px 35px rgba(255, 105, 180, 0.25);
+            border: 3px solid #ff99cc;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .letter-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #d63384, #ff69b4, #ffb6c1, #ff69b4, #d63384);
+        }
+
+        .decor-line {
+            text-align: center;
+            color: #ff69b4;
+            font-size: 1.4rem;
+            margin-bottom: 1.0rem;
+            letter-spacing: 0.4rem;
+        }
+
+        h1 {
+            text-align: center;
+            color: #d63384;
+            font-size: 1.9rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 2px 3px rgba(255, 105, 180, 0.15);
+        }
+
+        .salutation {
+            font-size: 1.2rem;
+            color: #8b2a63;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .message-body {
+            font-size: 1.08rem;
+            line-height: 1.8;
+            color: #5a2040;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .highlight {
+            color: #d63384;
+            font-weight: bold;
+        }
+
+        .closing-section {
+            margin-top: 2.5rem;
+            color: #8b2a63;
+            line-height: 1.7;
+        }
+
+        .signature {
+            margin-top: 0.8rem;
+            font-size: 1.15rem;
+            color: #d63384;
+            font-weight: bold;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: fall 6s infinite ease-in-out;
+            opacity: 0.75;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10px) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .letter-card {
+                padding: 2rem 1.3rem;
+            }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Start Modal to Trigger Music Autoplay -->
+    <div id="welcomeOverlay" class="overlay">
+        <h2 style="color: #d63384; margin-bottom: 1rem; text-align: center;">🎓 Graduation Greeting for Tita 💗</h2>
+        <button class="open-card-btn" onclick="startCard()">✉️ Open Card & Play Music</button>
+    </div>
+
+    <div class="system-container">
+        <div class="system-header">
+            <h2>🌸 Congratulations Letter System 🌸</h2>
+            <p style="color: #8b2a63; font-size: 0.95rem;">Celebrating your special graduate</p>
+        </div>
+
+        <!-- Music Control Widget -->
+        <div class="music-player-card">
+            <div class="song-title">🎶 A Million Dreams — Cover by Alexandra Porat</div>
+            <button id="musicToggleBtn" class="music-btn" onclick="togglePlayPause()">
+                🎵 Play Music
+            </button>
+            <div id="statusDisplay" class="lyrics-display">
+                ✨ Click above to control music ✨
+            </div>
+        </div>
+
+        <div class="letter-card">
+            <div class="decor-line">🌸 ✨ 💗 ✨ 🌸</div>
+            
+            <h1>Congratulations on Your Graduation! 🎓</h1>
+
+            <p class="salutation">Dear Tita Ems,</p>
+
+            <p class="message-body">
+                Congratulations on your graduation! 🎓❤️<br><br>
+                Today is more than just a celebration of receiving your diploma. It is a celebration of everything you have been through—the sacrifices you made, the struggles you faced, the tears you may have shed, and all the times you chose to keep going even when things were difficult.
+            </p>
+
+            <p class="message-body">
+                I want you to know how proud I am of you. Seeing you reach this moment makes my heart so happy because I know that this achievement did not come easily. Behind that graduation gown and beautiful smile is someone who worked hard, stayed strong, and never gave up on her dreams.<br><br>
+                Tita, I hope you realize how inspiring you are. You showed us that it is never too late to dream, to work hard, and to reach for something better. Your journey may not have been perfect, but every challenge helped make you the strong person you are today.
+            </p>
+
+            <p class="message-body">
+                As you hold your diploma, I hope you also remember all the people who believed in you along the way. And please remember that I will always be one of those people. I will always be proud of you—not only because you graduated, but because of the person you are.<br><br>
+                I wish I could put into words how happy I am for you. You deserve this moment. You deserve to celebrate. You deserve to look at yourself and say, <span class="highlight">“I did it.”</span> 🥹❤️
+            </p>
+
+            <p class="message-body">
+                From this day forward, may you continue to chase your dreams and create a life that makes you happy. There may be more challenges ahead, but I hope you never forget the strength that brought you this far.<br><br>
+                Tita, congratulations. You did it! 🎓😭❤️<br><br>
+                Thank you for being someone we can look up to. I hope this graduation reminds you that your hard work was never wasted and that your dreams are worth fighting for.<br><br>
+                I am so proud of you, and I love you very much. May God continue to guide you, bless you, and open beautiful doors for you.<br><br>
+                Congratulations, Tita! This is your moment. You earned it. ❤️🎓
+            </p>
+
+            <div class="closing-section">
+                <p>With all my love,</p>
+                <p class="signature">Your Beloved Niece Kellywayne 🫶</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Embedded YouTube Player Container (Updated with Alexandra Porat's video ID: YKf3RefbwXk) -->
+    <div id="youtube-player-container">
+        <div id="ytplayer"></div>
+    </div>
+
+    <!-- JavaScript for Player & Confetti -->
+    <script>
+        let player;
+        let playerReady = false;
+        let isPlaying = false;
+
+        // Load YouTube IFrame API Script
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('ytplayer', {
+                height: '1',
+                width: '1',
+                videoId: 'YKf3RefbwXk',
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'YKf3RefbwXk',
+                    'playsinline': 1
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            playerReady = true;
+            player.setVolume(100);
+        }
+
+        function onPlayerStateChange(event) {
+            const btn = document.getElementById('musicToggleBtn');
+            const status = document.getElementById('statusDisplay');
+            
+            if (event.data === YT.PlayerState.PLAYING) {
+                isPlaying = true;
+                btn.innerHTML = '⏸️ Pause Music';
+                status.innerHTML = '🎶 Playing: A Million Dreams (Cover by Alexandra Porat)';
+            } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+                isPlaying = false;
+                btn.innerHTML = '🎵 Play Music';
+                status.innerHTML = '⏸️ Music Paused';
+            }
+        }
+
+        function startCard() {
+            // Hide the overlay modal
+            const overlay = document.getElementById('welcomeOverlay');
+            overlay.classList.add('hidden');
+
+            // Trigger autoplay right inside the click event handler
+            if (playerReady && player) {
+                player.playVideo();
+            }
+
+            // Launch confetti celebration
+            createConfetti();
+        }
+
+        function togglePlayPause() {
+            if (!playerReady || !player) return;
+            if (isPlaying) {
+                player.pauseVideo();
+            } else {
+                player.playVideo();
+            }
+        }
+
+        function createConfetti() {
+            const colors = ['#ff69b4', '#ffb6c1', '#d63384', '#ff85c1', '#fff0f5'];
+            for (let i = 0; i < 40; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                confetti.style.animationDelay = (Math.random() * 2) + 's';
+                document.body.appendChild(confetti);
+
+                // Cleanup after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 8000);
+            }
+        }
+    </script>
+</body>
+</html>
